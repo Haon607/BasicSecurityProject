@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: SpringBaseWithSecurity
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/bsp-database
+    username: bsp-username
+    password: bsp-password
+  jpa:
+    show-sql: true

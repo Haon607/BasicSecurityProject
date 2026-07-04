@@ -1,4 +1,4 @@
-package at.twinformatics.springbasewithsecurity;
+package io.github.haon607.springbasewithsecurity;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

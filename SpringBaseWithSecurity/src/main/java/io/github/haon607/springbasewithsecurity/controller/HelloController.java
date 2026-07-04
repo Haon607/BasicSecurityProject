@@ -1,4 +1,4 @@
-package at.twinformatics.springbasewithsecurity.controller;
+package io.github.haon607.springbasewithsecurity.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
