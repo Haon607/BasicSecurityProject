@@ -1,6 +1,8 @@
 package io.github.haon607.springbasewithsecurity.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.UUID;
 
 @Entity
@@ -26,4 +29,6 @@ public class User {
     public UUID id;
     public String username;
     public String password;
+    @Enumerated(EnumType.STRING)
+    public Role role;
 }

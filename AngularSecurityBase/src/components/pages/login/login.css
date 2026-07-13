@@ -1,0 +1,7 @@
+.validator-hint {
+    display: none;
+}
+
+.validator:has(input:invalid) + .validator-hint {
+    display: block;
+}

@@ -1,0 +1,17 @@
+package io.github.haon607.springbasewithsecurity.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api")
+public class HelloController {
+    @GetMapping
+    public ResponseEntity<x> hello() {
+        return ResponseEntity.ok(new x("Hello World"));
+    }
+
+    public record x(String st) {}
+}
