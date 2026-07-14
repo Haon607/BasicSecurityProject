@@ -13,5 +13,9 @@ import lombok.Setter;
 public class UserDto {
     private String username;
     private String password;
-    private Role authority;
+    private Role role;
+
+    public static UserDto from(LoginRequest loginRequest) {
+        return new UserDto(loginRequest.username(), loginRequest.password(), Role.ROLE_USER);
+    }
 }

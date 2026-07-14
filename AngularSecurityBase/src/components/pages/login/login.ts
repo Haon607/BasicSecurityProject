@@ -19,6 +19,7 @@ export class Login {
     protected readonly Svg = Svg;
     protected user: LoginRequest = { username: '', password: '' };
     protected inLogin: boolean = false;
+    protected register: boolean = false;
 
     constructor(
         private readonly dialogService: DialogService,
@@ -32,11 +33,17 @@ export class Login {
     protected login() {
         this.inLogin = true;
 
-        this.httpLoginService.login(this.user).subscribe({
+        const loginOperationFunction = this.register
+            ? (user: LoginRequest) => this.httpLoginService.register(user)
+            : (user: LoginRequest) => this.httpLoginService.login(user);
+
+        loginOperationFunction(this.user).subscribe({
             next: (authenticationData) => {
                 this.inLogin = false;
                 this.cdr.detectChanges();
                 this.authenticationService.authenticationData = authenticationData;
+
+                // if (this.register) globalThis.location.reload();
 
                 const returnUrl = this.activatedRoute.snapshot.queryParamMap.get('url') ?? '/';
 
@@ -46,11 +53,25 @@ export class Login {
                 this.inLogin = false;
                 this.cdr.detectChanges();
 
-                this.dialogService.error.next(
-                    'Login failed! ' +
-                        (err.status === 401 ? 'Invalid Credentials' : toStatusText(err.status)),
-                );
+                if (this.register)
+                    this.dialogService.error.next(
+                        'Registrieren fehlgeschlagen! ' +
+                            (err.status === 401
+                                ? 'Username bereits vergeben.'
+                                : toStatusText(err.status)),
+                    );
+                else
+                    this.dialogService.error.next(
+                        'Anmelden fehlgeschlagen! ' +
+                            (err.status === 401
+                                ? 'Ungültige Anmeldedaten.'
+                                : toStatusText(err.status)),
+                    );
             },
         });
+    }
+
+    protected flipForm() {
+        this.register = !this.register;
     }
 }

@@ -1,6 +1,6 @@
 <form #loginForm="ngForm" (ngSubmit)="login()" class="flex justify-center">
     <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-        <legend class="fieldset-legend">Login</legend>
+        <legend class="fieldset-legend">{{ register ? 'Registrieren' : 'Login' }}</legend>
 
         <label class="input validator">
             <svg class="h-[1em] opacity-50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -42,13 +42,18 @@
         </label>
         <p class="validator-hint m-0">Must be 8 to 256 characters</p>
 
+        <label class="label">
+            <input (click)="flipForm()" class="checkbox" type="checkbox"/>
+            Registrieren
+        </label>
+
         <button
             [disabled]="loginForm.invalid || inLogin"
             class="btn btn-success mt-4">
             @if (inLogin) {
                 <span class="loading loading-spinner loading-md"></span>
             } @else {
-                Login
+                {{ register ? 'Registrieren' : 'Login' }}
             }
         </button>
     </fieldset>

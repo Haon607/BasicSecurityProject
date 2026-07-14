@@ -4,7 +4,7 @@ export interface LoginRequest {
 }
 
 export interface AuthenticationData extends LoginRequest {
-    authorities: Role;
+    role: Role;
 }
 
 export enum Role {

@@ -8,4 +8,7 @@ export class HttpLoginService extends HttpBaseService {
     public login(login: LoginRequest): Observable<AuthenticationData> {
         return this.httpClient.post<AuthenticationData>(this.baseUrl + '/login', login);
     }
+    public register(login: LoginRequest): Observable<AuthenticationData> {
+        return this.httpClient.post<AuthenticationData>(this.baseUrl + '/register', login);
+    }
 }
