@@ -5,14 +5,14 @@
     <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
             @if (authenticationService.authenticationData()?.role === Role.ROLE_ADMIN) {
-                <li><a>Nutzerverwaltung</a></li>
+                <li><a routerLink="users">Nutzerverwaltung</a></li>
             }
             @if (authenticationService.authenticationData()) {
                 <li>
                     <details>
                         <summary>{{ authenticationService.authenticationData()?.username }}</summary>
                         <ul class="bg-base-100 rounded-t-none p-2">
-                            <li><a (click)="authenticationService.logout()">
+                            <li><a (click)="logout()">
                                 <svg class="h-[1.5em]" fill="currentColor" viewBox="0 -960 960 960"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path [attr.d]="Svg.logOut"/>

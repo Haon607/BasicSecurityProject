@@ -18,4 +18,9 @@ export class Header {
 
     protected readonly Svg = Svg;
     protected readonly Role = Role;
+
+    protected logout() {
+        this.authenticationService.logout();
+        this.router.navigateByUrl('/')
+    }
 }

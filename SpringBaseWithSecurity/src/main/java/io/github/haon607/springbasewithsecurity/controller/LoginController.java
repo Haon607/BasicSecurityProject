@@ -39,6 +39,7 @@ public class LoginController {
 
         return ResponseEntity.ok().body(
                 new UserDto(
+                        null,
                         request.username(),
                         request.password(),
                         Role.valueOf(authentication.getAuthorities().stream()

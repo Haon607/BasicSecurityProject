@@ -1,5 +1,6 @@
 package io.github.haon607.springbasewithsecurity;
 
+import io.github.haon607.springbasewithsecurity.entities.Role;
 import io.github.haon607.springbasewithsecurity.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/users").hasAnyAuthority(Role.ROLE_ADMIN.toString())
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
