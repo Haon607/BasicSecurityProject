@@ -1,25 +1,42 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DialogService } from './dialog.service';
+import { DialogAttributes, DialogService } from './dialog.service';
 import { Svg } from '../../../helpers/svg';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-dialog-component',
-    imports: [FormsModule],
+    imports: [FormsModule, NgClass],
     templateUrl: './dialog.html',
     standalone: true,
 })
 export class Dialog {
-    protected errorMessage: WritableSignal<string> = signal('');
+    protected attributes: WritableSignal<DialogAttributes> = signal({
+        level: 'error',
+        message: '?',
+    });
     protected readonly Svg = Svg;
 
     constructor(private readonly dialogService: DialogService) {
-        dialogService.error.subscribe((errorMessage) => this.displayPopUp(errorMessage));
+        dialogService.dialog.subscribe((attributes) => this.displayPopUp(attributes));
     }
 
-    private displayPopUp(errorMessage: string): void {
+    protected icon(dialogAttributes: DialogAttributes): string {
+        switch (dialogAttributes.level) {
+            case 'error':
+                return Svg.crossInCircle;
+            case 'warning':
+                return Svg.warning;
+            case 'info':
+                return Svg.info;
+            case 'success':
+                return Svg.megaphone;
+        }
+    }
+
+    private displayPopUp(attributes: DialogAttributes): void {
         const modal = document.getElementById('error_modal') as HTMLDialogElement;
-        this.errorMessage.set(errorMessage);
+        this.attributes.set(attributes);
         modal.showModal();
     }
 }

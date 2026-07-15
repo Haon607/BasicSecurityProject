@@ -3,11 +3,18 @@
         <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>
-        <div class="alert alert-error alert-soft" role="alert">
+        <div
+            [ngClass]="{
+                'alert-error': attributes().level === 'error',
+                'alert-warning': attributes().level === 'warning',
+                'alert-success': attributes().level === 'success',
+                'alert-info': attributes().level === 'info'
+            }"
+            class="alert alert-soft" role="alert">
             <svg class="h-[2em]" fill="currentColor" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
-                <path [attr.d]="Svg.crossInCircle"/>
+                <path [attr.d]="icon(attributes())"/>
             </svg>
-            <p class="whitespace-pre-line">{{ errorMessage() }}</p>
+            <p class="whitespace-pre-line">{{ attributes().message }}</p>
         </div>
     </div>
     <form class="modal-backdrop" method="dialog">

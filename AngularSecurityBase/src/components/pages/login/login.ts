@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, signal, WritableSignal } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { Svg } from '../../../helpers/svg';
 import { LoginRequest } from '../../../model/authentication';
 import { FormsModule } from '@angular/forms';
@@ -49,19 +49,23 @@ export class Login {
                 this.inLogin.set(false);
 
                 if (this.register)
-                    this.dialogService.error.next(
-                        'Registrieren fehlgeschlagen! ' +
+                    this.dialogService.dialog.next({
+                        level: 'error',
+                        message:
+                            'Registrieren fehlgeschlagen! ' +
                             (err.status === 401
                                 ? 'Username bereits vergeben.'
                                 : toStatusText(err.status)),
-                    );
+                    });
                 else
-                    this.dialogService.error.next(
-                        'Anmelden fehlgeschlagen! ' +
+                    this.dialogService.dialog.next({
+                        level: 'error',
+                        message:
+                            'Anmelden fehlgeschlagen! ' +
                             (err.status === 401
                                 ? 'Ungültige Anmeldedaten.'
                                 : toStatusText(err.status)),
-                    );
+                    });
             },
         });
     }

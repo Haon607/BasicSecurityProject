@@ -5,5 +5,10 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class DialogService {
-    public error: Subject<string> = new Subject<string>();
+    public dialog: Subject<DialogAttributes> = new Subject<DialogAttributes>();
+}
+
+export interface DialogAttributes {
+    level: 'error' | 'warning' | 'success' | 'info';
+    message: string;
 }
