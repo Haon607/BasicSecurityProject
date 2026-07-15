@@ -4,8 +4,11 @@ import io.github.haon607.springbasewithsecurity.dto.UserDto;
 import io.github.haon607.springbasewithsecurity.entities.User;
 import io.github.haon607.springbasewithsecurity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -20,14 +23,23 @@ public class UserService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public UserDto create(UserDto userDto) {
-        userDto.setPassword(
-                encoder.encode(userDto.getPassword())
-        );
-        return objectMapper.convertValue(
-                userRepository.save(
-                        objectMapper.convertValue(userDto, User.class)
-                ), UserDto.class);
+        try {
+            userDto.setPassword(
+                    encoder.encode(userDto.getPassword())
+            );
+            return objectMapper.convertValue(
+                    userRepository.save(
+                            objectMapper.convertValue(userDto, User.class)
+                    ), UserDto.class);
 
+
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Username already exists",
+                    e
+            );
+        }
     }
 
     public UserDto findById(UUID uuid) {
@@ -53,7 +65,16 @@ public class UserService {
         if (userDto.getRole() != null)
             user.setRole(userDto.getRole());
 
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Username already exists",
+                    e
+            );
+        }
+
         return objectMapper.convertValue(user, UserDto.class);
     }
 

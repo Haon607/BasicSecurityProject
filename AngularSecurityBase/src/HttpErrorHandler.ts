@@ -27,7 +27,7 @@ export class HttpErrorHandler {
             default:
                 this.dialogService.dialog.next({
                     level: 'error',
-                    message: `Request fehlgeschlagen. ${toStatusText(err.status)}`,
+                    message: `Anfrage fehlgeschlagen. ${toStatusText(err.status)}`,
                 });
         }
     }

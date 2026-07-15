@@ -31,7 +31,7 @@ class RestClient<T> {
         return this.http.get<T[]>(`${this.path}`);
     }
 
-    get(id: number): Observable<T> {
+    get(id: string): Observable<T> {
         return this.http.get<T>(`${this.path}/${id}`);
     }
 
@@ -47,7 +47,7 @@ class RestClient<T> {
         });
     }
 
-    delete(id: number): Observable<void> {
+    delete(id: string): Observable<void> {
         return this.http.delete<void>(`${this.path}/${id}`);
     }
 }

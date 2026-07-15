@@ -1,0 +1,93 @@
+<form #form="ngForm" (ngSubmit)="save()" class="flex justify-center">
+    @if (mode !== 'create' && !user().id) {
+        <span class="loading loading-dots loading-md"></span>
+    } @else {
+        <div class="flex flex-col w-80">
+            <h1 class="font-bold text-xl text-center">
+                Nutzer {{ mode === 'edit' ? 'bearbeiten' : (mode === 'create' ? 'erstellen' : user().username) }}
+            </h1>
+
+            <fieldset class="fieldset">
+                <label class="label" for="name">Username</label>
+                <input
+                    [(ngModel)]="user().username"
+                    [disabled]="mode === 'view'"
+                    class="input validator"
+                    id="name"
+                    maxlength="32"
+                    minlength="3"
+                    name="username"
+                    pattern="[A-Za-z][A-Za-z0-9\-]*"
+                    required
+                    type="text"
+                />
+                <p class="validator-hint hidden m-0">Muss zwischen 3 und 32 Zeichen haben - bestehend nur aus
+                    Buchstaben,
+                    Zahlen
+                    oder Bindestrichen</p>
+            </fieldset>
+
+            @if (mode !== 'view') {
+                <fieldset class="fieldset">
+                    <label class="label" for="password">Passwort</label>
+                    @if (changePassword() || mode === 'create') {
+                        <input
+                            [(ngModel)]="user().password"
+                            class="input validator"
+                            id="password"
+                            maxlength="256"
+                            minLength="8"
+                            name="password"
+                            required
+                            type="password"
+                        />
+                        <p class="validator-hint hidden m-0">Muss zwischen 8 und 256 Zeichen haben</p>
+                    } @else {
+                        <button (click)="displayPasswordField()" type="button" class="btn btn-soft">Passwort ändern</button>
+                    }
+                </fieldset>
+            }
+
+            <fieldset class="fieldset">
+                <label class="label" for="role">Rolle</label>
+                <select [(ngModel)]="user().role"
+                        [disabled]="mode === 'view'"
+                        class="select validator"
+                        id="role"
+                        name="role"
+                        required>
+                    <option [ngValue]="Role.ROLE_ADMIN">Admin</option>
+                    <option [ngValue]="Role.ROLE_USER">User</option>
+                </select>
+                <p class="validator-hint hidden">Pflichtfeld</p>
+            </fieldset>
+
+            @if (mode !== 'view') {
+                <button
+                    [disabled]="form.invalid || savingInProgress()"
+                    type="submit"
+                    class="btn btn-primary mt-4">
+                    @if (savingInProgress()) {
+                        <span class="loading loading-spinner loading-md"></span>
+                    } @else {
+                        Speichern
+                    }
+                </button>
+            }
+
+
+        </div>
+
+    }
+</form>
+@if (mode === 'create' || user().id) {
+    <div class="flex w-full absolute left-10 bottom-10">
+        <button [disabled]="savingInProgress()" class="btn btn-soft mr-2" routerLink="/users">Zur Liste</button>
+        @if (mode === 'view' && authService.authenticationData()?.role === Role.ROLE_ADMIN) {
+            <button class="btn btn-soft btn-primary" routerLink="edit">Bearbeiten</button>
+        }
+        @if (mode === 'edit' && authService.authenticationData()?.role === Role.ROLE_ADMIN) {
+            <button (click)="delete()" [disabled]="savingInProgress()" class="btn btn-soft btn-error">Löschen</button>
+        }
+    </div>
+}
