@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, signal, WritableSignal } from '@angular/core';
 import { Svg } from '../../../helpers/svg';
 import { LoginRequest } from '../../../model/authentication';
 import { FormsModule } from '@angular/forms';
@@ -18,20 +18,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class Login {
     protected readonly Svg = Svg;
     protected user: LoginRequest = { username: '', password: '' };
-    protected inLogin: boolean = false;
+    protected inLogin: WritableSignal<boolean> = signal(false);
     protected register: boolean = false;
 
     constructor(
         private readonly dialogService: DialogService,
         private readonly httpLoginService: HttpLoginService,
-        private readonly cdr: ChangeDetectorRef,
         private readonly authenticationService: AuthenticationService,
         private readonly router: Router,
         private readonly activatedRoute: ActivatedRoute,
     ) {}
 
     protected login() {
-        this.inLogin = true;
+        this.inLogin.set(true);
 
         const loginOperationFunction = this.register
             ? (user: LoginRequest) => this.httpLoginService.register(user)
@@ -39,19 +38,15 @@ export class Login {
 
         loginOperationFunction(this.user).subscribe({
             next: (authenticationData) => {
-                this.inLogin = false;
-                this.cdr.detectChanges();
-                this.authenticationService.authenticationData = authenticationData;
-
-                // if (this.register) globalThis.location.reload();
+                this.inLogin.set(false);
+                this.authenticationService.authenticationData.set(authenticationData);
 
                 const returnUrl = this.activatedRoute.snapshot.queryParamMap.get('url') ?? '/';
 
                 this.router.navigateByUrl(returnUrl);
             },
             error: (err: HttpErrorResponse) => {
-                this.inLogin = false;
-                this.cdr.detectChanges();
+                this.inLogin.set(false);
 
                 if (this.register)
                     this.dialogService.error.next(

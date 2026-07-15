@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogService } from './dialog.service';
 import { Svg } from '../../../helpers/svg';
@@ -10,21 +10,16 @@ import { Svg } from '../../../helpers/svg';
     standalone: true,
 })
 export class Dialog {
-    protected errorMessage: string = '';
+    protected errorMessage: WritableSignal<string> = signal('');
+    protected readonly Svg = Svg;
 
-    constructor(
-        private readonly dialogService: DialogService,
-        private readonly cdr: ChangeDetectorRef,
-    ) {
+    constructor(private readonly dialogService: DialogService) {
         dialogService.error.subscribe((errorMessage) => this.displayPopUp(errorMessage));
     }
 
     private displayPopUp(errorMessage: string): void {
         const modal = document.getElementById('error_modal') as HTMLDialogElement;
-        this.errorMessage = errorMessage;
-        this.cdr.detectChanges();
+        this.errorMessage.set(errorMessage);
         modal.showModal();
     }
-
-    protected readonly Svg = Svg;
 }

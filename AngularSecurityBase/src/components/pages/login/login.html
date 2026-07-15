@@ -48,9 +48,9 @@
         </label>
 
         <button
-            [disabled]="loginForm.invalid || inLogin"
+            [disabled]="loginForm.invalid || inLogin()"
             class="btn btn-success mt-4">
-            @if (inLogin) {
+            @if (inLogin()) {
                 <span class="loading loading-spinner loading-md"></span>
             } @else {
                 {{ register ? 'Registrieren' : 'Login' }}
