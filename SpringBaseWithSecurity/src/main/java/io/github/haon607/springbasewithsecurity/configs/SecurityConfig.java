@@ -1,4 +1,4 @@
-package io.github.haon607.springbasewithsecurity;
+package io.github.haon607.springbasewithsecurity.configs;
 
 import io.github.haon607.springbasewithsecurity.entities.Role;
 import io.github.haon607.springbasewithsecurity.service.CustomUserDetailsService;
@@ -37,8 +37,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/ws/**").authenticated()
                         .requestMatchers("/api/users").hasAnyAuthority(Role.ROLE_ADMIN.toString())
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
